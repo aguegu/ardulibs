@@ -5,7 +5,7 @@
  *      Author: agu
  */
 
-#include "Lpd6803.h"
+#include "lpd6803.h"
 
 Lpd6803::Lpd6803(uint8_t pin_din, uint8_t pin_sck, byte length) :
 		_reg_din(portOutputRegister(digitalPinToPort(pin_din)) ), _reg_sck(

@@ -5,7 +5,7 @@
  *      Author: agu
  */
 
-#include "Hx711.h"
+#include "hx711.h"
 
 Hx711::Hx711(uint8_t pin_dout, uint8_t pin_slk) :
 		_pin_dout(pin_dout), _pin_slk(pin_slk)

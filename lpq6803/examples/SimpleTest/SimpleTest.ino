@@ -1,4 +1,4 @@
-#include "Lpd6803.h"
+#include "lpd6803.h"
 
 Lpd6803 lpd(12, 13, 10);
 // DIN - #12

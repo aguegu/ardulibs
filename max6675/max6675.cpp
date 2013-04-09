@@ -15,7 +15,7 @@
  * module designer: syyyd.com
  */
 
-#include "Max6675.h"
+#include "max6675.h"
 
 Max6675::Max6675(uint8_t pin_so, uint8_t pin_cs, uint8_t pin_clk, int offset) :
 		_pin_so(pin_so), _pin_cs(pin_cs), _pin_clk(pin_clk)

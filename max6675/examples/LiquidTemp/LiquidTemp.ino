@@ -1,5 +1,5 @@
 /*
- * SerialTemp.ino
+ * LiquidTemp.ino
  *
  * Arduino Library of Max6675 Cold-Junction-Compensated K-Thermocouple-
  * to-Digital Converter (0°C to +1024°C)
@@ -14,11 +14,23 @@
  *
  * module designer: syyyd.com
  *
- * example for Max6675 with Serial output 
+ * example for Max6675 with Liquid Crystal Display 1602 output 
  */
 
 
-#include "Max6675.h"
+#include "max6675.h"
+#include "LiquidCrystal.h"
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+/*
+ * LCD RS pin to digital pin 12
+ * LCD Enable pin to digital pin 11
+ * LCD D4 pin to digital pin 5
+ * LCD D5 pin to digital pin 4
+ * LCD D6 pin to digital pin 3
+ * LCD D7 pin to digital pin 2
+ * LCD R/W pin to ground
+ */
 
 Max6675 ts(8, 9, 10);
 // Max6675 module: SO on pin #8, SS on pin #9, CSK on pin #10 of Arduino UNO
@@ -27,21 +39,26 @@ Max6675 ts(8, 9, 10);
 
 void setup()
 {
+	lcd.begin(16, 2);
+
 	ts.setOffset(0);
 	// set offset for temperature measurement.
-	// 1 stannds for 0.25 Celsius
-
-	Serial.begin(9600);
+	// 1 stannds for -0.25 Celsius
 }
-
 
 void loop()
 {
-	Serial.print(ts.getCelsius(), 2);
-	Serial.print(" C / ");
-	Serial.print(ts.getFahrenheit(), 2);
-	Serial.print(" F / ");
-	Serial.print(ts.getKelvin(), 2);
-	Serial.print(" K\n");
-	delay(300);
+	lcd.clear();
+	lcd.print(ts.getCelsius(), 2);
+	lcd.write(' ');
+	lcd.write(0xdf);
+	lcd.write('C');
+
+	lcd.setCursor(0, 1);
+	lcd.print(ts.getFahrenheit(), 2);
+	lcd.write(' ');
+	lcd.write(0xdf);
+	lcd.write('F');
+
+	delay(500);
 }

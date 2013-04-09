@@ -5,7 +5,7 @@
  *      Author: agu
  */
 
-#include "KalmanFilter.h"
+#include "kalmanFilter.h"
 
 KalmanFilter::KalmanFilter(float dt) :
 		_dt(dt)
