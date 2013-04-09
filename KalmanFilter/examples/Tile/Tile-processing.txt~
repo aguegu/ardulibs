@@ -1,0 +1,59 @@
+// Tile.pde
+// Tile Monitor to receve 2 float variants following a byte of 0xff,
+// total 9 bytes at a time. and print the value on console and windows.
+// this sample works together with Tile.ino of KalmanFilter library of Arduino.
+// Author: Weihong Guan (@aGuegu)
+// Blog: http://aguegu.net
+// Host on: https://github.com/aguegu/Arduino
+
+import processing.serial.Serial;
+import java.nio.ByteBuffer;
+import org.apache.commons.lang3.ArrayUtils;
+
+private Serial _sp;
+private int _timer;
+
+public void setup()
+{
+  _sp = new Serial(this, "/dev/ttyUSB0", 115200);
+
+  _sp.buffer(9);
+
+  this.size(900, 314);
+  this.background(0x33);
+
+  _timer = 0;
+}
+
+public void draw()
+{
+}
+
+public void serialEvent(Serial p)
+{
+  byte[] data = p.readBytes();
+  ByteBuffer buff;
+
+  ArrayUtils.reverse(data);
+
+  buff = ByteBuffer.wrap(data, 1, 8);
+  float angle_kalman = buff.getFloat() + PI;
+  float angle_acc = buff.getFloat() + PI;
+
+  print(angle_kalman);
+  print(' ');
+  println(angle_acc);
+
+  stroke(color(0x00, 0xff, 0x00));
+  this.rect(_timer, height * angle_kalman / (PI * 2), 1, 1);
+  stroke(color(0xff, 0x00, 0x00));
+  this.rect(_timer, height * angle_acc / (PI * 2), 1, 1);
+
+  _timer++;
+  if (_timer == width)
+  {
+    _timer = 0;
+    background(0x33);
+  }
+}
+
