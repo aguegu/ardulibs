@@ -5,7 +5,7 @@
  *      Author: agu
  */
 
-#include "Twi.h"
+#include "twi.h"
 
 Twi::Twi(uint8_t buff_length) :
 		_buff_length(buff_length) {
