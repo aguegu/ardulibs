@@ -8,7 +8,7 @@
 // run Tile.pde with Processing to check the data from Serial
 
 #include "Wire.h"
-#include "kalmanFilter.h"
+#include "kalmanfilter.h"
 
 void writeToWire(int device, byte address, byte val);
 void readFromWire(int device, byte address, int count, byte * p);

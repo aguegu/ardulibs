@@ -5,7 +5,7 @@
  *      Author: Agu
  */
 
-#include "Ds1302.h"
+#include "ds1302.h"
 
 Ds1302::Ds1302(uint8_t pin_sclk, uint8_t pin_io, uint8_t pin_rst) :
 		_pin_sclk(pin_sclk), _pin_io(pin_io), _pin_rst(pin_rst)
