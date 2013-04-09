@@ -2,7 +2,7 @@
 // lib drv_hd44780_i2c host on https://github.com/aguegu/dot-matrix/tree/master/drv_hd44780_i2c
 // which also needs lib twi host on https://github.com/aguegu/Arduino/tree/master/libraries/Twi
 
-#include "Ds1302.h"
+#include "ds1302.h"
 
 DrvHd44780I2c lcd(0x20 + 7);
 Ds1302 rtc(5, 6, 7);

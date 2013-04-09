@@ -1,4 +1,4 @@
-#include "Ds1302.h"
+#include "ds1302.h"
 
 Ds1302 rtc(5, 6, 7);
 // CSK on pin #5
