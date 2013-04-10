@@ -60,11 +60,11 @@ void Lpd6803::setColor(byte index, byte r, byte g, byte b)
 	g &= 0x1f;
 	b &= 0x1f;
 
-	r = 0x1f - r;
-	g = 0x1f - r;
-	b = 0x1f - r;
+//	r = 0x1f - r;
+//	g = 0x1f - g;
+//	b = 0x1f - b;
 
-	_cache[index] = 0x8000 | g << 10 | b << 5 | r;
+	_cache[index] = 0x8000 | (word)g << 10 | (word)b << 5 | (word)r;
 }
 
 void Lpd6803::display()
