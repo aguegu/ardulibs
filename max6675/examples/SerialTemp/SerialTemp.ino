@@ -29,7 +29,7 @@ void setup()
 {
 	ts.setOffset(0);
 	// set offset for temperature measurement.
-	// 1 stannds for 0.25 Celsius
+	// 1 stands for 0.25 Celsius
 
 	Serial.begin(9600);
 }

@@ -22,7 +22,7 @@ Max6675::Max6675(uint8_t pin_so, uint8_t pin_cs, uint8_t pin_clk, int offset) :
 {
 	pinMode(_pin_clk, OUTPUT);
 	pinMode(_pin_cs, OUTPUT);
-	pinMode(_pin_so, INPUT);
+	pinMode(_pin_so, INPUT_PULLUP);
 
 	digitalWrite(_pin_cs, HIGH);
 
@@ -36,8 +36,8 @@ void Max6675::setOffset(int offset)
 
 int Max6675::getValue()
 {
-	digitalWrite(_pin_cs, LOW);
 	digitalWrite(_pin_clk, LOW);
+	digitalWrite(_pin_cs, LOW);
 	byte cH = shiftIn(_pin_so, _pin_clk, MSBFIRST);
 	byte cL = shiftIn(_pin_so, _pin_clk, MSBFIRST);
 
