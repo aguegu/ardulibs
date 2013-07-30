@@ -10,18 +10,18 @@
 
 #include "Arduino.h"
 
-class DigitalPin
-{
+class DigitalPin {
 public:
-	DigitalPin(uint8_t pin);
+	DigitalPin(uint8_t pin, uint8_t mode);
 	virtual ~DigitalPin();
 	void set(bool on);
-	void turnOn();
-	void turnOff();
-	void reverse();
+	void toggle();
+	bool read();
+
 private:
-	uint8_t _pin;
-	bool _on;
+	const uint8_t _mask;
+	volatile uint8_t * const _out;
+	volatile uint8_t * const _in;
 };
 
 #endif /* DIGITALPIN_H_ */

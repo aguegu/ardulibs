@@ -7,38 +7,26 @@
 
 #include "digitalpin.h"
 
-DigitalPin::DigitalPin(uint8_t pin)
-{
-	// TODO Auto-generated constructor stub
-	_pin = pin;
-	_on = false;
-	pinMode(_pin, OUTPUT);
-	this->turnOff();
+DigitalPin::DigitalPin(uint8_t pin, uint8_t mode) :
+		_mask( digitalPinToBitMask(pin)), _out(
+		portOutputRegister(digitalPinToPort(pin))), _in(
+				portInputRegister(digitalPinToPort(pin))) {
+	volatile uint8_t * reg = portModeRegister(digitalPinToPort(pin));
+	bitWriteMask(*reg, _mask, mode & 0x01);
+	bitWriteMask(*_out, _mask, mode & 0x02);
 }
 
-DigitalPin::~DigitalPin()
-{
-	// TODO Auto-generated destructor stub
+DigitalPin::~DigitalPin() {
 }
 
-void DigitalPin::turnOn()
-{
-	this->set(true);
+void DigitalPin::set(bool on) {
+	bitWriteMask(*_out, _mask, on);
 }
 
-void DigitalPin::turnOff()
-{
-	this->set(false);
+void DigitalPin::toggle() {
+	bitToggleMask(*_out, _mask);
 }
 
-void DigitalPin::set(bool on)
-{
-	_on = on;
-	digitalWrite(_pin, _on);
-}
-
-void DigitalPin::reverse()
-{
-	_on = !_on;
-	this->set(_on);
+bool DigitalPin::read() {
+	return bitReadMask(*_in, _mask);
 }

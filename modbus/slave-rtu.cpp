@@ -8,11 +8,10 @@
 #include "slave-rtu.h"
 
 SlaveRtu::SlaveRtu() {
-	// TODO Auto-generated constructor stub
 
 }
 
 SlaveRtu::~SlaveRtu() {
-	// TODO Auto-generated destructor stub
+
 }
 
