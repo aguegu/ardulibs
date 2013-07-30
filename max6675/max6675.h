@@ -37,7 +37,7 @@ private:
 	const uint8_t _pin_clk;
 	int _offset;
 
-
+	byte shiftIn();
 };
 
 #endif /* MAX6675_H_ */

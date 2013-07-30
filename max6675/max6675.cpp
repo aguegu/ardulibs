@@ -22,7 +22,7 @@ Max6675::Max6675(uint8_t pin_so, uint8_t pin_cs, uint8_t pin_clk, int offset) :
 {
 	pinMode(_pin_clk, OUTPUT);
 	pinMode(_pin_cs, OUTPUT);
-	pinMode(_pin_so, INPUT_PULLUP);
+	pinMode(_pin_so, INPUT);
 
 	digitalWrite(_pin_cs, HIGH);
 
@@ -34,12 +34,27 @@ void Max6675::setOffset(int offset)
 	_offset = offset;
 }
 
+byte Max6675::shiftIn() {
+	byte i = 8, val = 0;
+	while (i--) {
+		//delayMicroseconds(100);
+		delay(1);
+		digitalWrite(_pin_clk, HIGH);
+		//delayMicroseconds(100);
+		delay(1);
+		val <<= 1;
+		val |= digitalRead(_pin_so) ? 0x01 : 0x00;
+		digitalWrite(_pin_clk, LOW);
+	}
+	return val;
+}
+
 int Max6675::getValue()
 {
 	digitalWrite(_pin_clk, LOW);
 	digitalWrite(_pin_cs, LOW);
-	byte cH = shiftIn(_pin_so, _pin_clk, MSBFIRST);
-	byte cL = shiftIn(_pin_so, _pin_clk, MSBFIRST);
+	byte cH = this->shiftIn();
+	byte cL = this->shiftIn();
 
 	int temperature = makeWord(cH, cL);
 	digitalWrite(_pin_cs, HIGH);
