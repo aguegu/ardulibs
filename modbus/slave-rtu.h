@@ -8,6 +8,8 @@
 #ifndef SLAVE_RTU_H_
 #define SLAVE_RTU_H_
 
+#include "Arduino.h"
+
 class SlaveRtu {
 public:
 	SlaveRtu();
