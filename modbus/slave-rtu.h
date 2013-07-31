@@ -9,11 +9,17 @@
 #define SLAVE_RTU_H_
 
 #include "Arduino.h"
+#include "digitalpin.h"
 
 class SlaveRtu {
 public:
-	SlaveRtu();
+	SlaveRtu(HardwareSerial usart);
+	void init();
 	virtual ~SlaveRtu();
+
+private:
+	 HardwareSerial const & _usart;
+	bool _is_receiving;
 };
 
 #endif /* SLAVE_RTU_H_ */
