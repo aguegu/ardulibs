@@ -13,13 +13,19 @@
 
 class SlaveRtu {
 public:
-	SlaveRtu(HardwareSerial usart);
+	SlaveRtu(HardwareSerial & usart);
 	void init();
 	virtual ~SlaveRtu();
 
+	void handler();
+	void onTimIrq();
 private:
-	 HardwareSerial const & _usart;
+	HardwareSerial & _usart;
 	bool _is_receiving;
+
+	static const uint16_t _BUFF_LENGTH = 256;
+	uint8_t _buff_rx[_BUFF_LENGTH];
+	uint8_t _buff_tx[_BUFF_LENGTH];
 };
 
 #endif /* SLAVE_RTU_H_ */
