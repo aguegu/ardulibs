@@ -7,8 +7,10 @@
 
 #include "slave-rtu.h"
 
-SlaveRtu::SlaveRtu(HardwareSerial & usart, uint8_t address) :
-		_usart(usart), _address(address) {
+SlaveRtu::SlaveRtu(HardwareSerial & usart, uint8_t address, uint8_t de,
+		uint8_t re) :
+		_usart(usart), _address(address), _de(DigitalPin(de, OUTPUT)), _re(
+				DigitalPin(re, OUTPUT)) {
 	_is_receiving = true;
 
 	_bit_inputs = NULL;
@@ -80,6 +82,10 @@ void SlaveRtu::initHoldings(uint16_t length) {
 }
 
 void SlaveRtu::init() {
+
+	_de.set(LOW);
+	_re.set(LOW);
+
 #if defined(TCCR2)
 	TIMER_CS(TCCR2, 2, TIMER_WITHOUT_EXT_CLK_CS_NUL);
 	TIMER_2BIT_WAVEFORM(2, TIMER_2BIT_WAVEFORM_PCPWM);
@@ -95,11 +101,11 @@ void SlaveRtu::init() {
 #endif
 
 	_usart.begin(19200, SERIAL_8E1);
+
 }
 
 void SlaveRtu::handler() {
 
-	extern DigitalPin led;
 	static uint16_t length_rx = 0;
 
 	if (_usart.available()) {
@@ -107,11 +113,9 @@ void SlaveRtu::handler() {
 		TCNT2 = 0;
 		sbi(TIMSK2, OCIE2A);
 		TIMER_CS(TCCR2B, 2, TIMER_WITHOUT_EXT_CLK_CS_128);
-		led.set(HIGH);
 	}
 
 	if (_is_receiving == false) {
-		led.set(LOW);
 		memset(_buff_tx, 0, _BUFF_LENGTH);
 
 		do {
@@ -164,7 +168,8 @@ void SlaveRtu::handler() {
 				length_tx = 3;
 			}
 
-			if (_buff_tx[0]) this->appendCrcAndReply(length_tx);
+			if (_buff_tx[0])
+				this->appendCrcAndReply(length_tx);
 
 		} while (false);
 
@@ -181,8 +186,15 @@ void SlaveRtu::appendCrcAndReply(uint8_t length_tx) {
 	uint16_t v = crc.calc(_buff_tx, length_tx);
 	_buff_tx[length_tx] = lowByte(v);
 	_buff_tx[length_tx + 1] = highByte(v);
+
+	_de.set(HIGH);
+	_re.set(HIGH);
+
 	_usart.Print::write(_buff_tx, length_tx + 2);
 	_usart.flush();
+
+	_de.set(LOW);
+	_re.set(LOW);
 }
 
 bool SlaveRtu::checkFrameCrc(const uint8_t *p, uint8_t length) {
@@ -331,10 +343,12 @@ uint8_t SlaveRtu::onWriteMultipleCoils(uint8_t length_rx,
 
 uint8_t SlaveRtu::onReadHoldings(uint8_t * p_length_tx) {
 	uint16_t length = make16(_buff_rx[4], _buff_rx[5]);
-	if (!length || length > 0x07d) return 0x03;
+	if (!length || length > 0x07d)
+		return 0x03;
 
 	uint16_t index = make16(_buff_rx[2], _buff_rx[3]);
-	if (index + length > _holding_length) return 0x02;
+	if (index + length > _holding_length)
+		return 0x02;
 
 	for (uint8_t i = 0; i < length; i++) {
 		_buff_tx[3 + i + i] = highByte(_holdings[index + i]);
@@ -350,11 +364,13 @@ uint8_t SlaveRtu::onWriteSingleHolding(uint8_t * p_length_tx) {
 	uint16_t val = make16(_buff_rx[4], _buff_rx[5]);
 
 	uint16_t index = make16(_buff_rx[2], _buff_rx[3]);
-	if (index >= _holding_length) return 0x02;
+	if (index >= _holding_length)
+		return 0x02;
 
 	this->setHolding(index, val);
 
-	if (updateHoldings(index, 1)) return 0x04;
+	if (updateHoldings(index, 1))
+		return 0x04;
 
 	memcpy(_buff_tx + 2, _buff_rx + 2, 4);
 	*p_length_tx = 6;
@@ -362,28 +378,31 @@ uint8_t SlaveRtu::onWriteSingleHolding(uint8_t * p_length_tx) {
 }
 
 uint8_t SlaveRtu::onWriteMultipleHoldings(uint8_t length_rx,
-	uint8_t * p_length_tx) {
+		uint8_t * p_length_tx) {
 	uint16_t length = make16(_buff_rx[4], _buff_rx[5]);
-	if (!length || length > 0x7b) return 0x03;
-	if (length_rx - 9 != _buff_rx[6]) return 0x03;
-	if ((uint8_t)length != _buff_rx[6] >> 1) return 0x03;
+	if (!length || length > 0x7b)
+		return 0x03;
+	if (length_rx - 9 != _buff_rx[6])
+		return 0x03;
+	if ((uint8_t) length != _buff_rx[6] >> 1)
+		return 0x03;
 
 	uint16_t index = make16(_buff_rx[2], _buff_rx[3]);
-	if (index + length > _holding_length) return 0x02;
+	if (index + length > _holding_length)
+		return 0x02;
 
 	for (uint8_t i = 0; i < length; i++) {
 		_holdings[index + i] =
 		make16(_buff_rx[7 + i + i], _buff_rx[8 + i + i]);
 	}
 
-	if (updateHoldings(index, length)) return 0x04;
+	if (updateHoldings(index, length))
+		return 0x04;
 
 	memcpy(_buff_tx + 2, _buff_rx + 2, 4);
 	*p_length_tx = 6;
 	return 0;
 }
-
-
 
 ISR(TIMER2_COMPA_vect) {
 	TIMER_CS(TCCR2B, 2, TIMER_WITHOUT_EXT_CLK_CS_NUL);

@@ -14,7 +14,7 @@
 
 class SlaveRtu {
 public:
-	SlaveRtu(HardwareSerial & usart, uint8_t address);
+	SlaveRtu(HardwareSerial & usart, uint8_t address, uint8_t de, uint8_t re);
 	virtual ~SlaveRtu();
 	void init();
 
@@ -40,7 +40,6 @@ public:
 	uint16_t getHolding(uint16_t index);
 
 protected:
-
 	uint16_t _coil_length;
 	uint16_t _bit_input_length;
 	uint16_t _short_input_length;
@@ -51,7 +50,6 @@ protected:
 	virtual uint8_t updateCoils(uint16_t index, uint16_t length) {return 0;};
 	virtual uint8_t updateHoldings(uint16_t index, uint16_t length) {return 0;};
 
-
 private:
 	HardwareSerial & _usart;
 	volatile bool _is_receiving;
@@ -60,6 +58,9 @@ private:
 	static const uint16_t _BUFF_LENGTH = 256;
 	uint8_t _buff_rx[_BUFF_LENGTH];
 	uint8_t _buff_tx[_BUFF_LENGTH];
+
+	DigitalPin _de;
+	DigitalPin _re;
 
 	void appendCrcAndReply(uint8_t length_tx);
 	bool checkFrameCrc(const uint8_t *p, uint8_t length);
