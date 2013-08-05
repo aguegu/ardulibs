@@ -9,7 +9,7 @@
 #define DS3231_H_
 
 #include "Arduino.h"
-#include "twi.h"
+#include "twi/twi.h"
 
 #define SECOND	0
 #define MINUTE	1
