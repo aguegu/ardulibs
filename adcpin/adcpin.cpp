@@ -20,7 +20,7 @@ AdcPin::~AdcPin() {
 
 uint16_t AdcPin::read() {
 #if defined(ADCSRB) && defined(MUX5)
-	ADCSRB = (ADCSRB & ~(1 << MUX5)) | (((pin >> 3) & 0x01) << MUX5);
+	ADCSRB = (ADCSRB & ~(1 << MUX5)) | (((_channel >> 3) & 0x01) << MUX5);
 #endif
 
 	// set the analog reference (high two bits of ADMUX) and select the
