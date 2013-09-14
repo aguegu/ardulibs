@@ -18,7 +18,7 @@
  */
 
 
-#include "max6675.h"
+#include "max6675/max6675.h"
 #include "LiquidCrystal.h"
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);

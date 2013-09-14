@@ -18,7 +18,7 @@
  */
 
 
-#include "max6675.h"
+#include "max6675/max6675.h"
 
 Max6675 ts(8, 9, 10);
 // Max6675 module: SO on pin #8, SS on pin #9, CSK on pin #10 of Arduino UNO
