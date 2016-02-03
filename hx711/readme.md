@@ -1,10 +1,6 @@
 Thanks for trying my lib. It has been quite a while, and there are still people email me about how to use it. I really appreciate that.
 
-I have wrote an blog about hx711:
-
-http://aguegu.net/?p=1327
-
-Well, in Chiese...
+I have written (an blog about hx711)[http://aguegu.net/?p=1327], well, in Chiese...
 
 To config the module right, you need to config the offset and the scale. The `setScale` function should be named `setRatio` to make its function more clear.
 
