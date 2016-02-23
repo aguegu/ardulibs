@@ -2,7 +2,7 @@ Thanks for trying my lib. It has been quite a while, and there are still people 
 
 I have written [an blog about hx711](http://aguegu.net/?p=1327), well, in Chiese...
 
-To config the module right, you need to config the offset and the scale. The `setScale` function should be named `setRatio` to make its function more clear.
+To config the module right, you need to config the offset and the scale. The `setScale` function should be named `setRatio` to make its function more clear. But for now, just leave it the way it is.
 
 The offset and scale value are got by experiments, which means they vary according to different setups.
 
