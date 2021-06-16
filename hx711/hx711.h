@@ -26,7 +26,7 @@ public:
 	long averageValue(byte times = 32);
 	void setOffset(long offset);
 	void setScale(float scale = 742.f);
-	float getGram();
+	float getGram(byte times = 32);
 
 private:
 	const uint8_t _pin_dout;

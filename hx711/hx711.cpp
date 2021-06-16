@@ -74,8 +74,8 @@ void Hx711::setScale(float scale)
 	_scale = scale;
 }
 
-float Hx711::getGram()
+float Hx711::getGram(byte times)
 {
-	long val = (averageValue() - _offset);
+	long val = (averageValue(times) - _offset);
 	return (float) val / _scale;
 }
